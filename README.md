@@ -9,8 +9,7 @@ The objective of this project is to design and implement a scalable, fault-toler
 The platform emphasizes system design, performance, and reliability rather than visualization alone, demonstrating how large-scale sensor data systems can be architected for real-world engineering use cases.
 
 ## High-Level Architecture
-(1–2 lines for now, diagram comes next)
-
+The system is designed as modular, loosely coupled pipeline to reliably handle high-frequency sensor data. At a high-level sensor data is continuosly generated and sent to an ingestion service, which validates and safely accepts incoming data. The processing engine then performs real-time and batch processing, including aggregation and anomaly detection, before storing time-series data efficiently. Monitoring and alerting run in parallel to observe system health and sensor behaviour, enabling early detection of failures and abnormal conditions.  
 ## Core Components
 - Sensor Simulator:
   Generates configurable high-frequency sensor data to emulate real-world engineering systems under varying conditions.
