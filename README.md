@@ -12,15 +12,15 @@ The platform emphasizes system design, performance, and reliability rather than 
 (1–2 lines for now, diagram comes next)
 
 ## Core Components
-- Sensor Simulator
+- Sensor Simulator:
   Generates configurable high-frequency sensor data to emulate real-world engineering systems under varying conditions.
-- Ingestion Service
+- Ingestion Service:
   Receives incoming sensor data, performs validation and normalization, and ensures reliable data intake at scale.
-- Processing Engine
+- Processing Engine:
   Processes streaming and batch sensor data, performs aggregations, and identifies anomalies based on predefined rules.
-- Storage Layer
+- Storage Layer:
   Stores time-series sensor data efficiently for fast reads, writes, and historical analysis.
-- Monitoring & Alerts
+- Monitoring & Alerts:
   Tracks system health and sensor anomalies, triggering alerts when tresholds and failures are detected.
 
 ## Future Extensions
