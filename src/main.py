@@ -1,5 +1,5 @@
-from models.sensor import Sensor
-from simulator.generator import simulate_sensor_stream
+from src.models.sensor import Sensor
+from src.simulator.generator import simulate_sensor_stream
 
 if __name__ == "__main__":
     temperature_sensor= Sensor(
