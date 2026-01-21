@@ -1,11 +1,20 @@
-from src.models.sensor import Sensor
-from src.simulator.generator import simulate_sensor_stream
+from src.sensor import Sensor
+from src.storage import FileStorage
+import time
+
+def main():
+    sensor = Sensor("TEMP_001", "temperature", "C")
+    storage = FileStorage()
+
+    try:
+        while True:
+            reading = sensor.read()
+            print("📡", reading)
+            storage.save(reading)
+            time.sleep(1)
+
+    except KeyboardInterrupt:
+        print("🛑 Stopped")
 
 if __name__ == "__main__":
-    temperature_sensor= Sensor(
-        sensor_id="TEMP_001",
-        sensor_type="temperature",
-        unit="C"
-    )
-
-simulate_sensor_stream(temperature_sensor)
+    main()
