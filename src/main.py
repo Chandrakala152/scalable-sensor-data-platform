@@ -3,14 +3,21 @@ from src.storage import FileStorage
 import time
 
 def main():
-    sensor = Sensor("TEMP_001", "temperature", "C")
+    sensors = [
+        Sensor("TEMP_001", "temperature", "C"),
+        Sensor("HUM_001", "humidity", "%"),
+        Sensor("PRESS_001", "pressure", "hPa")
+    ]
+
     storage = FileStorage()
 
     try:
         while True:
-            reading = sensor.read()
-            print("📡", reading)
-            storage.save(reading)
+            for sensor in sensors:
+                reading = sensor.generate_reading() 
+                print("📡", reading)
+                storage.save(reading)
+
             time.sleep(1)
 
     except KeyboardInterrupt:
@@ -18,3 +25,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
