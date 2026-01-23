@@ -1,0 +1,12 @@
+{"sensor_id": "TEMP_001", "sensor_type": "temperature", "value": 92.18, "unit": "C", "timestamp": "2026-01-23T15:33:06.697890"}
+{"sensor_id": "HUM_001", "sensor_type": "humidity", "value": 71.27, "unit": "%", "timestamp": "2026-01-23T15:33:06.699320"}
+{"sensor_id": "PRESS_001", "sensor_type": "pressure", "value": 80.68, "unit": "hPa", "timestamp": "2026-01-23T15:33:06.700489"}
+{"sensor_id": "TEMP_001", "sensor_type": "temperature", "value": 54.97, "unit": "C", "timestamp": "2026-01-23T15:33:07.702058"}
+{"sensor_id": "HUM_001", "sensor_type": "humidity", "value": 37.39, "unit": "%", "timestamp": "2026-01-23T15:33:07.703073"}
+{"sensor_id": "PRESS_001", "sensor_type": "pressure", "value": 96.11, "unit": "hPa", "timestamp": "2026-01-23T15:33:07.705682"}
+{"sensor_id": "TEMP_001", "sensor_type": "temperature", "value": 55.92, "unit": "C", "timestamp": "2026-01-23T15:33:08.706990"}
+{"sensor_id": "HUM_001", "sensor_type": "humidity", "value": 59.99, "unit": "%", "timestamp": "2026-01-23T15:33:08.709036"}
+{"sensor_id": "PRESS_001", "sensor_type": "pressure", "value": 61.38, "unit": "hPa", "timestamp": "2026-01-23T15:33:08.710709"}
+{"sensor_id": "TEMP_001", "sensor_type": "temperature", "value": 39.26, "unit": "C", "timestamp": "2026-01-23T15:33:09.712483"}
+{"sensor_id": "HUM_001", "sensor_type": "humidity", "value": 45.13, "unit": "%", "timestamp": "2026-01-23T15:33:09.718902"}
+{"sensor_id": "PRESS_001", "sensor_type": "pressure", "value": 48.66, "unit": "hPa", "timestamp": "2026-01-23T15:33:09.723205"}
