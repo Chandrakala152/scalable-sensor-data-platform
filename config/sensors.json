@@ -1,0 +1,17 @@
+[
+    {
+        "sensor_id": "TEMP_001",
+        "sensor_type": "temperature",
+        "unit":"C"
+    },
+    {
+        "sensor_id":"HUM_001",
+        "sensor_type":"humidity",
+        "unit":"%"
+    },
+    {
+        "sensor_id":"PRES_001",
+        "sensor_type":"pressure",
+        "unit":"hPa"
+    }
+]

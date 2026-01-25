@@ -1,6 +1,7 @@
 from src.sensor import Sensor
 from src.storage import FileStorage
 from src.logger import setup_logger
+from src.config_loader import load_sensors_config
 import logging
 import time
 
@@ -8,10 +9,15 @@ def main():
     logger= setup_logger()
     logger.info("Sensor system started")
 
+    sensors_config = load_sensors_config()
+
     sensors = [
-        Sensor("TEMP_001", "temperature", "C"),
-        Sensor("HUM_001", "humidity", "%"),
-        Sensor("PRESS_001", "pressure", "hPa")
+        Sensor(
+            cfg["sensor_id"], 
+            cfg["sensor_type"],
+            cfg["unit"],
+        )
+        for cfg in sensors_config
     ]
 
     storage = FileStorage()
