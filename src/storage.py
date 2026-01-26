@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+from src.validator import validate_reading 
 
 class FileStorage:
     def __init__(self, filename="sensor_data.json"):
@@ -9,6 +10,10 @@ class FileStorage:
         self.filepath = os.path.join(self.data_dir, filename)
 
     def save(self, reading):
+        if not validate_reading(reading):
+            logging.error("Invalid reading skipped")
+            return
+        
         try:
             with open(self.filepath, "a", encoding="utf-8") as f:
               json.dump(reading, f)
