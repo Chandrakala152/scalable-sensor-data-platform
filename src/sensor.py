@@ -7,7 +7,7 @@ class Sensor:
         self.sensor_type = sensor_type
         self.unit = unit
 
-    def read(self):
+    def generate_reading(self):
         value = round(random.uniform(10, 100), 2)
         return {
             "sensor_id": self.sensor_id,

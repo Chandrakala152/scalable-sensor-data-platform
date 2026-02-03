@@ -13,7 +13,7 @@ def export_json_to_csv(
     
     with open(json_path,"r", encoding="utf-8") as json_file:
         records= [json.loads(line) for line in json_file if line.strip()]
-
+        
     if not records:
         logging.warning("No records found to export")
         return

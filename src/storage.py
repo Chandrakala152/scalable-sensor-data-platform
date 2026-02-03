@@ -21,3 +21,18 @@ class FileStorage:
             logging.info(f"Saved reading from {reading['sensor_id']}")
         except Exception as e:
             logging.error(f"Failed to save reading: {e}")
+
+    def get_latest_readings(self):
+        latest = {}
+        try:
+            with open(self.filepath, "r", encoding="utf-8") as f:
+                for line in f:
+                    if line.strip():
+                        continue
+                    record = json.loads(line)
+                    sensor_id = record["sensor_id"]
+                    latest[sensor_id] = record
+
+        except Exception as e:
+            logging.error(f"Failed to read latest readings: {e}")
+        return latest

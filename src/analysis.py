@@ -34,6 +34,33 @@ def calculate_stats(grouped_data):
 
     return stats
 
+def system_health_report(sensor_status):
+    report = {
+        "ACTIVE": 0,
+        "STALE": 0,
+        "DEAD": 0
+    }
+
+    for info in sensor_status.values():
+        report[info["state"]] += 1
+
+    return report
+
+def generate_health_alerts(sensor_status):
+    alerts = []
+
+    for sensor_id, info in sensor_status.items():
+        if info["severity"] in ("WARNING", "ERROR"):
+            alert = {
+                "sensor_id": sensor_id,
+                "state": info["state"],
+                "severity": info["severity"],
+                "last_seen_seconds": info["last_seen"]
+            }
+            alerts.append(alert)
+
+    return alerts
+    
 def main():
     records= load_records()
     grouped= group_by_sensor(records)
