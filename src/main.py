@@ -1,12 +1,14 @@
-from src.sensor import Sensor
-from src.storage import FileStorage
+from sensor import Sensor
+from storage import FileStorage
 from datetime import datetime
-from src.logger import setup_logger, alert_sensor
-from src.config_loader import load_sensors_config
+from logger import setup_logger, alert_sensor
+from config_loader import load_sensors_config
 import logging
 import time
-from src.time_analysis import detect_stale_sensors
+from time_analysis import detect_stale_sensors
+from analysis import AnalysisEngine
 
+logging.basicConfig(level=logging.INFO)
 setup_logger()
 
 def main():
@@ -37,7 +39,7 @@ def main():
             for sensor_id, status_info in sensor_status.items():
                 alert_sensor(sensor_id, status_info)
 
-            time.sleep(5)
+            time.sleep
 
     except KeyboardInterrupt:
         logger.warning("Sensor system stopped by user")

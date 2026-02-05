@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-from src.validator import validate_reading 
+from validator import validate_reading 
 
 class FileStorage:
     def __init__(self, filename="sensor_data.json"):
@@ -22,17 +22,18 @@ class FileStorage:
         except Exception as e:
             logging.error(f"Failed to save reading: {e}")
 
-    def get_latest_readings(self):
-        latest = {}
+    def get_latest_readings(self, sensor_id):
+        readings = []
         try:
             with open(self.filepath, "r", encoding="utf-8") as f:
                 for line in f:
-                    if line.strip():
+                    if not line.strip():
                         continue
                     record = json.loads(line)
-                    sensor_id = record["sensor_id"]
-                    latest[sensor_id] = record
+                    if record.get("sensor_id") == sensor_id:
+                        readings.append(record)
 
         except Exception as e:
-            logging.error(f"Failed to read latest readings: {e}")
-        return latest
+            logging.error(f"Failed to read readings: {e}")
+
+        return readings
