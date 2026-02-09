@@ -13,7 +13,7 @@ def load_records(file_path):
                 records.append(record)
     return records
 
-def latest_reading_per_second(records):
+def latest_reading_per_sensor(records):
     latest = {}
 
     for record in records:
@@ -32,6 +32,7 @@ def detect_stale_sensors(latest_records, threshold_seconds=5):
     status = {}
 
     for sensor_id, record in latest_records.items():
+
         last_time = record["timestamp"]
 
         if isinstance(last_time, str):
@@ -47,8 +48,8 @@ def detect_stale_sensors(latest_records, threshold_seconds=5):
         status[sensor_id] = {
             "state": state,
             "severity": severity,
-            "last_seen_sec": round(diff, 2),
-            "quarantined": state == "DEAD"
+            "last_seen_sec": diff,
+            "description": f"Last update {int(diff)} seconds ago"
         }
 
     return status
@@ -61,11 +62,3 @@ def classify_sensor(diff_seconds):
     else:
         return "DEAD", "ERROR"
 
-if __name__ == "__main__":
-    data = load_records("data/sensor_data.json")
-
-    latest = latest_reading_per_second(data)
-    status = detect_stale_sensors(latest, threshold_seconds=5)
-
-    for sensor_id, info in status.items():
-        alert_sensor(sensor_id, info)

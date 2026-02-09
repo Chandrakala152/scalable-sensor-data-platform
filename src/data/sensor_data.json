@@ -1,0 +1,3 @@
+{"sensor_id": "TEMP_001", "sensor_type": "temperature", "value": 14.87, "unit": "C", "timestamp": "2026-02-05T16:02:35.679381"}
+{"sensor_id": "HUM_001", "sensor_type": "humidity", "value": 49.92, "unit": "%", "timestamp": "2026-02-05T16:02:35.680668"}
+{"sensor_id": "PRES_001", "sensor_type": "pressure", "value": 75.38, "unit": "hPa", "timestamp": "2026-02-05T16:02:35.681534"}
