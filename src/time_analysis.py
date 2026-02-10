@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 import json
-from logger import alert_sensor
+from src.logger import alert_sensor
 
 
 def load_records(file_path):

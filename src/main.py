@@ -1,12 +1,12 @@
-from sensor import Sensor
-from storage import FileStorage
+from src.sensor import Sensor
+from src.storage import FileStorage
 from datetime import datetime, timezone
-from logger import setup_logger, alert_sensor
-from config_loader import load_sensors_config
+from src.logger import setup_logger, alert_sensor
+from src.config_loader import load_sensors_config
 import logging
 import time
-from time_analysis import detect_stale_sensors, latest_reading_per_sensor
-from analysis import AnalysisEngine
+from src.time_analysis import detect_stale_sensors, latest_reading_per_sensor
+from src.analysis import AnalysisEngine
 
 logging.basicConfig(level=logging.INFO)
 setup_logger()
@@ -43,6 +43,24 @@ def main():
                 latest_records,
                 threshold_seconds=5
             )
+            print("\n=== SENSOR HEALTH REPORT ===")
+            for sensor_id, info in sensor_status.items():
+                print(
+                    f"{sensor_id} | "
+                    f"state: {info['state']} | "
+                    f"severity: {info['severity']} | "
+                    f"last seen: {int(info['last_seen_sec'])} sec ago | "
+                )
+            print("============================\n")
+
+            for sensor_id, info in sensor_status.items():
+                if info["severity"] == "ERROR":
+                    logger.error(f"{sensor_id} DEAD: {info['description']}")
+                elif info["severity"] == "WARNING":
+                    logger.warning(f"{sensor_id} STALE: {info['description']}")
+                else:
+                    logger.info(f"{sensor_id} ACTIVE")
+                    
             for sensor_id, status_info in sensor_status.items():
                 alert_sensor(sensor_id, status_info)
 

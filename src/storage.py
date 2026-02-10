@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-from validator import validate_reading 
+from src.validator import validate_reading 
 
 class FileStorage:
     def __init__(self, filename="sensor_data.json"):
