@@ -210,3 +210,8 @@ __marimo__/
 data/*.txt
 __pycache__/
 *.pyc
+
+#generated data
+data/*.json
+data/*.csv
+logs/

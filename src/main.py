@@ -7,6 +7,7 @@ import logging
 import time
 from src.time_analysis import detect_stale_sensors, latest_reading_per_sensor
 from src.analysis import AnalysisEngine
+from src.exporter import export_health_report
 
 logging.basicConfig(level=logging.INFO)
 setup_logger()
@@ -43,6 +44,7 @@ def main():
                 latest_records,
                 threshold_seconds=5
             )
+            export_health_report(sensor_status)
             print("\n=== SENSOR HEALTH REPORT ===")
             for sensor_id, info in sensor_status.items():
                 print(

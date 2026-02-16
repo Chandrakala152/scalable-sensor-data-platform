@@ -26,3 +26,33 @@ def export_json_to_csv(
         writer.writerows(records)
 
     logging.info(f"Exported {len(records)} records to CSV")
+
+def export_health_report(sensor_status, output_dir="data"):
+    os.makedirs(output_dir, exist_ok=True)
+
+    json_path = os.path.join(output_dir, "sensor_health.json")
+    csv_path = os.path.join(output_dir, "sensor_health.csv")
+
+    with open(json_path, "w", encoding="utf-8") as jf:
+        json.dump(sensor_status, jf, indent=2, default=str)
+
+    with open(csv_path, "w", encoding="utf-8") as cf:
+        writer = csv.writer(cf)
+        writer.writerow([
+            "sensor_id",
+            "state",
+            "severity",
+            "last_seen_sec",
+            "description"
+        ])
+
+        for sensor_id, info in sensor_status.items():
+            writer.writerow([
+                sensor_id,
+                info["state"],
+                info["severity"],
+                info["last_seen_sec"],
+                info["description"]
+            ])
+
+        logging.info("Exported Sensor Health Report")
