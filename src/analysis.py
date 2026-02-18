@@ -1,6 +1,6 @@
 import json
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from statistics import mean
 import logging
 import os
@@ -146,6 +146,32 @@ class AnalysisEngine:
         else:
             logger.info(f"Sensor={sensor_id} healthy | Avg = {result['stats'].get('average')}")
         return result
+
+def generate_health_report(sensor_status: dict) -> dict:
+    summary = {
+        "ACTIVE": 0,
+        "STALE": 0,
+        "DEAD": 0
+    }
+    for _, info in sensor_status.items():
+        state = info["state"]
+        if state in summary:
+            summary[state] += 1
+
+    overall_state = "HEALTHY"
+    if summary["DEAD"] > 0:
+        overall_state = "CRITICAL"
+    elif summary["STALE"] > 0:
+        overall_state = "WARNING"
+
+    report = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "overall_state": overall_state,
+        "summary": summary,
+        "sensors": sensor_status
+    }
+
+    return report
     
 def main():
     records= load_records()

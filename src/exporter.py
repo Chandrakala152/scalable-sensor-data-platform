@@ -56,3 +56,13 @@ def export_health_report(sensor_status, output_dir="data"):
             ])
 
         logging.info("Exported Sensor Health Report")
+
+def export_system_health_report(report: dict, output_dir="data"):
+    os.makedirs(output_dir, exist_ok=True)
+
+    path = os.path.join(output_dir, "system_health_report.json")
+
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(report, f, indent=2, default=str)
+
+    logging.info("System health report exported successfully")
