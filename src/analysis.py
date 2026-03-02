@@ -91,7 +91,7 @@ class AnalysisEngine:
         self.storage = storage
 
     def get_recent_readings(self, sensor_id, minutes=5):
-        readings = self.storage.get_latest_readings(sensor_id)
+        readings = self.storage.get_latest_readings()
         cutoff_time = datetime.utcnow() - timedelta(minutes=minutes)
         recent = [
             r for r in readings
@@ -100,24 +100,22 @@ class AnalysisEngine:
         logger.info(f"{len(recent)} recent readings found for {sensor_id}")
         return recent
     
-    def compute_stats(self, sensor_id):
-        readings = self.storage.get_latest_readings(sensor_id)
-        if not readings:
-            logger.warning(f"No readings found for {sensor_id}")
-            return None
-        recent_readings = filter_last_n_minutes(readings, minutes=5)
-        trend = detect_trend(recent_readings)
+    def compute_stats(self, readings):
+        timestamps = [
+            datetime.fromisoformat(r["timestamp"]) 
+            for r in readings
+        ]
+        latest_ts = max(timestamps) 
+        now = datetime.utcnow()
+        stale = (now - latest_ts).total_seconds() > 5
         values = [r["value"] for r in readings]
-        stats = {
-            "count": len(values),
-            "max": max(values),
+        return {
+            "average": sum(values)/ len(values),
             "min": min(values),
-            "average": round(sum(values) / len(values), 2),
-            "recent_count": len(recent_readings),
-            "trend": trend
+            "max": max(values),
+            "stale": stale
         }
-        logger.info(f"Stats computed for {sensor_id}: {stats}")
-        return stats
+        
     
     def classify_risk(self, sensor_id):
         stats = self.compute_stats(sensor_id)
@@ -139,39 +137,61 @@ class AnalysisEngine:
         }
     
     def process_sensor(self, sensor_id):
-        result = self.classify_risk(sensor_id)
-        risk = result.get("risk")
-        if risk in ("WARNING", "CRITICAL"):
-            logger.warning(f"ALERT | Sensor={sensor_id} | Risk={risk} | Stats={result['stats']}")
+        readings = self.storage.get_latest_readings()
+        if not readings:
+            return {
+                "state": "DEAD",
+                "stats": {}
+            }
+        stats = self.compute_stats(readings)
+        print("DEBUG stats:", stats)
+        if stats["stale"]:
+            state = "STALE"
         else:
-            logger.info(f"Sensor={sensor_id} healthy | Avg = {result['stats'].get('average')}")
-        return result
+            state = "ACTIVE"
+        return {
+            "state": state,
+            "stats": stats
+        }
+    
 
-def generate_health_report(sensor_status: dict) -> dict:
-    summary = {
-        "ACTIVE": 0,
-        "STALE": 0,
-        "DEAD": 0
-    }
-    for _, info in sensor_status.items():
-        state = info["state"]
-        if state in summary:
-            summary[state] += 1
+    def compute_sensor_status(self):
+        sensor_status = {}
+        sensors = self.storage.get_all_sensors()
+        for sensor_id in sensors:
+            result = self.process_sensor(sensor_id)
+            sensor_status[sensor_id] = {
+                "state": result["state"],
+                "stats": result.get("stats", {})
+            }
+        return sensor_status
 
-    overall_state = "HEALTHY"
-    if summary["DEAD"] > 0:
-        overall_state = "CRITICAL"
-    elif summary["STALE"] > 0:
-        overall_state = "WARNING"
+    def generate_health_report(self):
+        sensor_status = self.compute_sensor_status()
+        summary = {
+            "ACTIVE": 0,
+            "STALE": 0,
+            "DEAD": 0
+        }
+        for _, info in sensor_status.items():
+            state = info["state"]
+            if state in summary:
+                summary[state] += 1
 
-    report = {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "overall_state": overall_state,
-        "summary": summary,
-        "sensors": sensor_status
-    }
+        overall_state = "HEALTHY"
+        if summary["DEAD"] > 0:
+            overall_state = "CRITICAL"
+        elif summary["STALE"] > 0:
+            overall_state = "WARNING"
 
-    return report
+        report = {
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "overall_state": overall_state,
+            "summary": summary,
+            "sensors": sensor_status
+        }
+
+        return report
     
 def main():
     records= load_records()

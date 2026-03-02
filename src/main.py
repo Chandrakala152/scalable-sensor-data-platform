@@ -6,7 +6,7 @@ from src.config_loader import load_sensors_config
 import logging
 import time
 from src.time_analysis import detect_stale_sensors, latest_reading_per_sensor
-from src.analysis import AnalysisEngine, generate_health_report
+from src.analysis import AnalysisEngine
 from src.exporter import export_health_report, export_system_health_report
 
 logging.basicConfig(level=logging.INFO)
@@ -44,8 +44,9 @@ def main():
                 latest_records,
                 threshold_seconds=5
             )
-            health_report = generate_health_report(sensor_status)
-            logger.info(f"System Health : {health_report["overall_state"]}")
+            analysis_engine = AnalysisEngine(storage)
+            health_report = analysis_engine.generate_health_report()
+            logger.info(f"System Health : {health_report['overall_state']}")
             export_health_report(sensor_status)
             export_system_health_report(health_report)
             print("\n=== SENSOR HEALTH REPORT ===")
