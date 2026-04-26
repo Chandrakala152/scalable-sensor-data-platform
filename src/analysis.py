@@ -184,14 +184,21 @@ class AnalysisEngine:
         elif summary["STALE"] > 0:
             overall_state = "WARNING"
 
-        report = {
+        return {
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "overall_state": overall_state,
             "summary": summary,
-            "sensors": sensor_status
+            "sensors":[{
+                "sensor_id":sensor_id,
+                "average":data["stats"]["average"],
+                "min":data["stats"]["min"],
+                "max":data["stats"]["max"],
+                "stale":data["stats"]["stale"],
+                "state":data["state"]
+            }
+            for sensor_id,data in sensor_status.items()
+            ]
         }
-
-        return report
     
 def main():
     records= load_records()

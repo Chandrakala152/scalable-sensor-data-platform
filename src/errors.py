@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from src.models.error import ErrorResponse
 
 def sensor_not_found(sensor_id: str):
-    return HTTPException(
+    raise HTTPException(
         status_code=404,
         detail={
             "error": "SENSOR_NOT_FOUND",
